@@ -1,6 +1,6 @@
 [package]
 name = "mupen64plus-sys"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2018"
 build = "build.rs"
 license = "GPL-2.0"
@@ -13,4 +13,4 @@ description = "Rust bindings to libmupen64plus"
 libloading = "0.7"
 
 [build-dependencies]
-bindgen = "0.59"
+bindgen = "0.69"

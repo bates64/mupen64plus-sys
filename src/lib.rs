@@ -16,17 +16,12 @@ mod tests {
     const LIBMUPEN64PLUS: &str = "libmupen64plus.dll";
 
     #[test]
-    fn load_core_lib() {      
+    fn load_core_lib() {
         unsafe {
-            let lib = if let Ok(lib) = libmupen64plus::new(LIBMUPEN64PLUS) {
-                lib
-            } else if let Ok(lib) = libmupen64plus::new(format!("{}/{}", env!("CARGO_MANIFEST_DIR"), LIBMUPEN64PLUS)) {
-                lib
-            } else {
-                panic!("could not load {} - see README.md for more information", LIBMUPEN64PLUS);
-            };
+            let lib = libmupen64plus::new(LIBMUPEN64PLUS).unwrap();
 
-            let plugin_get_version: libloading::Symbol<ptr_PluginGetVersion> = lib.__library.get(b"PluginGetVersion").unwrap();
+            let plugin_get_version: libloading::Symbol<ptr_PluginGetVersion> =
+                lib.__library.get(b"PluginGetVersion").unwrap();
             let plugin_get_version = plugin_get_version.unwrap();
 
             let mut plugin_type = 0;
@@ -34,7 +29,13 @@ mod tests {
             let mut api_version = 0;
             let plugin_name = std::ptr::null_mut();
             let mut capabilities = 0;
-            plugin_get_version(&mut plugin_type, &mut plugin_version, &mut api_version, plugin_name, &mut capabilities);
+            plugin_get_version(
+                &mut plugin_type,
+                &mut plugin_version,
+                &mut api_version,
+                plugin_name,
+                &mut capabilities,
+            );
 
             assert!(plugin_type == m64p_plugin_type_M64PLUGIN_CORE);
         }
